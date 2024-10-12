@@ -12,6 +12,9 @@ def question(request, id_question):
 def tag(request, id_tag):
     return render(request, 'tag.html')
 
+def hot(request):
+    return render(request, 'hot.html')
+
 def login(request):
     return render(request, 'login.html')
 
