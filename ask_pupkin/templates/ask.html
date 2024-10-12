@@ -1,0 +1,38 @@
+{% extends "./base.html" %}
+
+{% block title %}
+ask
+{% endblock title %}
+
+{% block content %}
+<div class="d-flex gap-3 align-items-center">
+    <h1>New Question</h1>
+</div>
+<div class="text-danger" type="error">
+    Please fill in all required fields
+</div>
+<form action="" role="question">
+    <div class="row mb-3">
+        <label for="form-elem-1" class="col-sm-1 col-form-label">Title</label>
+        <div class="col-sm-10">
+            <input type="text" id="form-elem-1" class="form-control" />
+        </div>
+    </div>
+
+    <div class="row mb-3">
+        <label for="form-elem-1" class="col-sm-1 col-form-label">Text</label>
+        <div class="col-sm-10">
+            <textarea class="form-control" id="exampleFormControlTextarea1" rows="10"></textarea>
+        </div>
+    </div>
+
+    <div class="row mb-3">
+        <label for="form-elem-1" class="col-sm-1 col-form-label">Tags</label>
+        <div class="col-sm-10">
+            <input type="text" id="form-elem-1" class="form-control" />
+        </div>
+    </div>
+</form>
+<label for="form-elem-1" class="col-sm-1 col-form-label"></label>
+<button type="ask" class="btn btn-secondary">Ask</button>
+{% endblock content %}

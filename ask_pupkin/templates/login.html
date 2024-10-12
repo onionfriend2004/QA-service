@@ -1,0 +1,33 @@
+{% extends "./base.html" %}
+
+{% block title %}
+login
+{% endblock title %}
+
+{% block content %}
+<div class="d-flex gap-3 align-items-center">
+    <h1>Log In</h1>
+</div>
+<div class="text-danger" type="error">
+    Sorry, wrong password
+</div>
+<form action="" role="question">
+    <div class="row mb-3">
+        <label for="form-elem-1" class="col-sm-2 col-form-label">Login</label>
+        <div class="col-sm-4">
+            <input type="login" id="form-elem-1" class="form-control" placeholder="Enter your login here" />
+        </div>
+    </div>
+    <div class="row mb-3">
+        <label for="form-elem-1" class="col-sm-2 col-form-label">Password</label>
+        <div class="col-sm-4">
+            <input type="password" id="form-elem-1" class="form-control" placeholder="Enter your password here" />
+        </div>
+    </div>
+</form>
+<label for="form-elem-1" class="col-sm-2 col-form-label"></label>
+<button type="login" class="btn btn-secondary">Log in</button>
+<div class="row mb-3">
+    <a href="">create new account</a>
+</div>
+{% endblock content %}

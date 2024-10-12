@@ -1,10 +1,11 @@
 <!DOCTYPE html>
+{% load static %}
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Index</title>
-    <link rel="stylesheet" href="../static/css/bootstrap.min.css">
+    <title>{% block title %}{% endblock %}</title>
+    <link rel="stylesheet" href="{% static './css/bootstrap.min.css' %}">
 </head>
 <body>
     <nav class="navbar navbar-expand-lg bg-body-tertiary">
@@ -21,6 +22,7 @@
                 <button class="btn btn-success m-2" type="submit">Ask</button>
 
                 <div class="d-flex gap-1">
+                    {% if True %}
                     <img src="jpg.jpg" alt="Avatar" class="img-thumbnail">
                     <div>
                         <div>
@@ -29,48 +31,22 @@
                         <a href="#">settings</a>
                         <a href="#">log out</a>
                     </div>
+                    {% else %}
+                    <div class="d-flex gap-1">
+                        <a href="#">log in</a>
+                        <a href="#">register</a>
+                    </div>
+                    {% endif %}
                 </div>
             </div>
         </div>
     </nav>
 
     <main class="container mt-3">
-        <div class="d-flex gap-3 align-items-center">
-            <h1>Settings: FoxiesSanya</h1>
-        </div>
         <div class="row">
             <div class="col-9">
-                <form action="" role="question">
-                    <div class="row mb-3">
-                        <label for="form-elem-1" class="col-sm-2 col-form-label">Login</label>
-                        <div class="col-sm-4">
-                            <input type="login" id="form-elem-1" class="form-control" placeholder="Enter your login here" />
-                        </div>
-                    </div>
-
-                    <div class="row mb-3">
-                        <label for="form-elem-1" class="col-sm-2 col-form-label">Email</label>
-                        <div class="col-sm-4">
-                            <input type="login" id="form-elem-1" class="form-control" placeholder="Enter your email here" />
-                        </div>
-                    </div>
-
-                    <div class="row mb-3">
-                        <label for="form-elem-1" class="col-sm-2 col-form-label">Nickname</label>
-                        <div class="col-sm-4">
-                            <input type="login" id="form-elem-1" class="form-control" placeholder="Enter your nickname here" />
-                        </div>
-                    </div>
-
-                    <div class="row mb-3">
-                        <label for="formFile" class="col-sm-2 form-label">Upload avatar</label>
-                        <div class="col-sm-4">
-                            <img src="jpg.jpg" alt="Avatar" class="img-thumbnail" style="width: 150px; height: 150px;">
-                            <input class="form-control" type="file" id="formFile">
-                        </div>
-                      </div>
-                </form>
-                <button type="save" class="btn btn-secondary">Save</button>
+                {% block content %}
+                {% endblock %}
             </div>
             <div class="col">
                 <section class="mb-3">
@@ -106,6 +82,6 @@
 
 
     </main>
-    <script src="../static/js/bootstrap.min.js"></script>
+    <script src="{% static 'js/bootstrap.min.js' %}"></script>
 </body>
 </html>
