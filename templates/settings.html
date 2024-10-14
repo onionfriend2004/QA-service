@@ -1,40 +1,54 @@
 {% extends "./base/base.html" %}
 
 {% block title %}
-settings
+login
 {% endblock title %}
 
 {% block content %}
-<form action="" role="question">
-    <div class="row mb-3">
-        <label for="form-elem-1" class="col-sm-2 col-form-label">Login</label>
-        <div class="col-sm-4">
-            <input type="login" id="form-elem-1" class="form-control" placeholder="Enter your login here" />
-        </div>
-    </div>
+<div class="d-flex gap-3 align-items-center">
+    <h1>Registration</h1>
+</div>
 
-    <div class="row mb-3">
-        <label for="form-elem-1" class="col-sm-2 col-form-label">Email</label>
-        <div class="col-sm-4">
-            <input type="login" id="form-elem-1" class="form-control" placeholder="Enter your email here" />
-        </div>
-    </div>
+<div class="mb-3 text-danger" type="error">
+    Sorry, wrong password
+</div>
 
-    <div class="row mb-3">
-        <label for="form-elem-1" class="col-sm-2 col-form-label">Nickname</label>
-        <div class="col-sm-4">
-            <input type="login" id="form-elem-1" class="form-control" placeholder="Enter your nickname here" />
-        </div>
+<div class="row mb-3">
+    <label for="form-elem-1" class="col-sm-2 col-form-label">Login</label>
+    <div class="col-sm-4">
+        <input type="login" id="form-elem-1" class="form-control" placeholder="Enter your login here" />
     </div>
+</div>
 
-    <div class="row mb-3">
-        <label for="formFile" class="col-sm-2 form-label">Upload avatar</label>
-        <div class="col-sm-4">
-            <img src="jpg.jpg" alt="Avatar" class="img-thumbnail" style="width: 150px; height: 150px;">
-            <input class="form-control" type="file" id="formFile">
+<div class="row mb-3">
+    <label for="form-elem-1" class="col-sm-2 col-form-label">Email</label>
+    <div class="col-sm-4">
+        <input type="login" id="form-elem-1" class="form-control" placeholder="Enter your email here" />
+    </div>
+</div>
+
+<div class="row mb-3">
+    <label for="form-elem-1" class="col-sm-2 col-form-label">Nickname</label>
+    <div class="col-sm-4">
+        <input type="login" id="form-elem-1" class="form-control" placeholder="Enter your nickname here" />
+    </div>
+</div>
+
+<div class="row mb-3">
+    <label for="form-elem-1" class="col-sm-2 col-form-label">Upload avatar</label>
+    <div class="col-sm-4">
+        <div class="mb-2">
+            <img src="../static/img/pfp.jpg" alt="Avatar" class="img-thumbnail profilePictureSettings">
         </div>
-        </div>
-</form>
-<label for="form-elem-1" class="col-sm-2 col-form-label"></label>
-<button type="save" class="btn btn-secondary">Save</button>
+        <input class="form-control" type="file" id="formFile">
+    </div>
+</div>
+
+<div class="row mt-3">
+    <div class="col-2">
+    </div>
+    <div class="col-10">
+        <button type="button" class="btn btn-primary">Sign up</button>
+    </div>
+</div>
 {% endblock content %}

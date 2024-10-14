@@ -1,59 +1,65 @@
 {% extends "./base/base.html" %}
 
 {% block title %}
-signup
+login
 {% endblock title %}
 
 {% block content %}
 <div class="d-flex gap-3 align-items-center">
     <h1>Registration</h1>
 </div>
-<div class="text-danger" type="error">
-    Sorry, this email address is already registered!
+
+<div class="mb-3 text-danger" type="error">
+    Sorry, wrong password
 </div>
-<form action="" role="question">
-    <div class="row mb-3">
-        <label for="form-elem-1" class="col-sm-2 col-form-label">Login</label>
-        <div class="col-sm-4">
-            <input type="login" id="form-elem-1" class="form-control" placeholder="Enter your login here" />
-        </div>
-    </div>
 
-    <div class="row mb-3">
-        <label for="form-elem-1" class="col-sm-2 col-form-label">Email</label>
-        <div class="col-sm-4">
-            <input type="login" id="form-elem-1" class="form-control" placeholder="Enter your email here" />
-        </div>
+<div class="row mb-3">
+    <label for="form-elem-1" class="col-sm-2 col-form-label">Login</label>
+    <div class="col-sm-4">
+        <input type="login" id="form-elem-1" class="form-control" placeholder="Enter your login here" />
     </div>
+</div>
 
-    <div class="row mb-3">
-        <label for="form-elem-1" class="col-sm-2 col-form-label">Nickname</label>
-        <div class="col-sm-4">
-            <input type="login" id="form-elem-1" class="form-control" placeholder="Enter your nickname here" />
-        </div>
+<div class="row mb-3">
+    <label for="form-elem-1" class="col-sm-2 col-form-label">Email</label>
+    <div class="col-sm-4">
+        <input type="login" id="form-elem-1" class="form-control" placeholder="Enter your email here" />
     </div>
+</div>
 
-    <div class="row mb-3">
-        <label for="form-elem-1" class="col-sm-2 col-form-label">Password</label>
-        <div class="col-sm-4">
-            <input type="password" id="form-elem-1" class="form-control" placeholder="Enter your password here" />
-        </div>
+<div class="row mb-3">
+    <label for="form-elem-1" class="col-sm-2 col-form-label">Nickname</label>
+    <div class="col-sm-4">
+        <input type="login" id="form-elem-1" class="form-control" placeholder="Enter your nickname here" />
     </div>
+</div>
 
-    <div class="row mb-3">
-        <label for="form-elem-1" class="col-sm-2 col-form-label">Repeat password</label>
-        <div class="col-sm-4">
-            <input type="password" id="form-elem-1" class="form-control" placeholder="Enter your password here" />
-        </div>
+<div class="row mb-3">
+    <label for="form-elem-1" class="col-sm-2 col-form-label">Password</label>
+    <div class="col-sm-4">
+        <input type="password" id="form-elem-1" class="form-control" placeholder="Enter your password here" />
     </div>
+</div>
 
-    <div class="row mb-3">
-        <label for="formFile" class="col-sm-2 form-label">Upload avatar</label>
-        <div class="col-sm-4">
-            <input class="form-control" type="file" id="formFile">
-        </div>
-        </div>
-</form>
-<label for="form-elem-1" class="col-sm-2 col-form-label"></label>
-<button type="register" class="btn btn-secondary">Register</button>
+<div class="row mb-3">
+    <label for="form-elem-1" class="col-sm-2 col-form-label">Repeat password</label>
+    <div class="col-sm-4">
+        <input type="password" id="form-elem-1" class="form-control" placeholder="Enter your password here" />
+    </div>
+</div>
+
+<div class="row mb-3">
+    <label for="form-elem-1" class="col-sm-2 col-form-label">Upload avatar</label>
+    <div class="col-sm-4">
+        <input class="form-control" type="file" id="formFile">
+    </div>
+</div>
+
+<div class="row mt-3">
+    <div class="col-2">
+    </div>
+    <div class="col-10">
+        <button type="button" class="btn btn-primary">Sign up</button>
+    </div>
+</div>
 {% endblock content %}

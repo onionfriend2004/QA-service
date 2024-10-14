@@ -1,0 +1,35 @@
+<nav class="navbar navbar-expand-lg bg-body-tertiary">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="{% url 'index' %}">AskMe</a>
+
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <div class="d-flex w-100 justify-content-between align-items-center">
+                <form class="d-flex">
+                    <input class="form-control me-2" type="search" placeholder="Type question" aria-label="search">
+                    <button class="btn btn-outline-primary" type="submit">Search</button>
+                </form>
+                <ul class="navbar-nav d-flex align-items-center">
+                    <li class="nav-item me-2">
+                        <a href="{% url 'ask' %}" class="btn btn-primary">Ask</a>
+                    </li>
+                    <li class="nav-item">
+                        <div class="d-flex gap-1">
+                            <img src="../static/img/pfp.jpg" alt="Avatar" class="rounded-circle profilePicture">
+                            <div class="d-flex flex-column">
+                                <div class="d-flex ms-2">Sigma</div>
+                                <div class="d-flex">
+                                    <a class="nav-link me-2" href="{% url 'settings' %}">Settings</a>
+                                    <a class="nav-link" href="#">Log out</a>
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</nav>
