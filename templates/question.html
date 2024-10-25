@@ -8,7 +8,7 @@ question
 {% include "components/questioninfo.html" %}
 <hr>
 <div class="d-flex flex-column gap-3">
-    {% for i in '012'|make_list %}
+    {% for answer in answers %}
         {% include "components/answer.html" %}
     {% endfor %}
 </div>
@@ -18,7 +18,7 @@ question
     <div class="form-group mb-3">
         <textarea class="form-control" id="exampleFormControlTextarea1" rows="5"></textarea>
     </div>
-    <div class="mb-3">
+    <div class="mb-3" id="end">
         <button type="answer" class="btn btn-primary">Answer</button>
     </div>
 </div>

@@ -9,7 +9,7 @@ tag
     <h1>Tag: bebra</h1>
 </div>
 <div class="d-flex flex-column gap-3">
-    {% for i in '012'|make_list %}
+    {% for question in questions %}
         {% include "components/questioncard.html" %}
     {% endfor %}
 </div>
