@@ -23,10 +23,13 @@
         <div class="d-flex gap-5">
             <div>
                 Tags:
-                <span class="badge rounded-pill text-bg-primary">tag</span>
-                <span class="badge rounded-pill text-bg-secondary">tag</span>
-                <span class="badge rounded-pill text-bg-success">tag</span>
-                <span class="badge rounded-pill text-bg-danger">tag</span>
+                {% for tag in question.tags%}
+                    <span class="badge rounded-pill text-bg-primary">
+                        <a class="text-decoration-none text-reset" href="{% url 'app:tag'  tag.id %}">
+                            {{tag.name}}
+                        </a>
+                    </span>
+                {% endfor %}
             </div>
         </div>
     </div>

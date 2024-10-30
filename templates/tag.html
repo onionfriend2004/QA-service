@@ -6,7 +6,7 @@ tag
 
 {% block content %}
 <div class="d-flex gap-3 align-items-center">
-    <h1>Tag: bebra</h1>
+    <h1>Tag: {{ tag.name }}</h1>
 </div>
 <div class="d-flex flex-column gap-3">
     {% for question in questions %}
