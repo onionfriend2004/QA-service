@@ -28,7 +28,7 @@ def paginate(objects_list, request, per_page=3, adjacent_pages=2):
     }
 
 def index(request):
-    popular_users = Profile.objects.all()[:5]
+    popular_users = Profile.objects.popular_users()
     popular_tags = Tag.objects.popular_tags()
     questions_page = paginate(Question.objects.all(), request)
 
@@ -41,7 +41,7 @@ def index(request):
     return render(request, 'index.html', context)
 
 def ask(request):
-    popular_users = Profile.objects.all()[:5]
+    popular_users = Profile.objects.popular_users()
     popular_tags = Tag.objects.popular_tags()
 
     context = {
@@ -52,7 +52,7 @@ def ask(request):
     return render(request, 'ask.html', context)
 
 def question(request, id_question):
-    popular_users = Profile.objects.all()[:5]
+    popular_users = Profile.objects.popular_users()
     popular_tags = Tag.objects.popular_tags()
     question_item = Question.objects.get(id=id_question)
     answers = Answer.objects.by_question(id_question)
@@ -70,7 +70,7 @@ def question(request, id_question):
 
 def tag(request, id_tag):
     tag = Tag.objects.get(id=id_tag)
-    popular_users = Profile.objects.all()[:5]
+    popular_users = Profile.objects.popular_users()
     popular_tags = Tag.objects.popular_tags()
     questions = Question.objects.by_tag(tag)
     content = paginate(questions, request)
@@ -86,7 +86,7 @@ def tag(request, id_tag):
 
 
 def hot(request):
-    popular_users = Profile.objects.all()[:5]
+    popular_users = Profile.objects.popular_users()
     popular_tags = Tag.objects.popular_tags()
     questions = Question.objects.hot()
     content = paginate(questions, request)
@@ -101,7 +101,7 @@ def hot(request):
 
 
 def login(request):
-    popular_users = Profile.objects.all()[:5]
+    popular_users = Profile.objects.popular_users()
     popular_tags = Tag.objects.popular_tags()
 
     context = {
@@ -111,7 +111,7 @@ def login(request):
     return render(request, 'login.html', context)
 
 def signup(request):
-    popular_users = Profile.objects.all()[:5]
+    popular_users = Profile.objects.popular_users()
     popular_tags = Tag.objects.popular_tags()
 
     context = {
@@ -121,7 +121,7 @@ def signup(request):
     return render(request, 'signup.html', context)
 
 def settings(request):
-    popular_users = Profile.objects.all()[:5]
+    popular_users = Profile.objects.popular_users()
     popular_tags = Tag.objects.popular_tags()
 
     context = {

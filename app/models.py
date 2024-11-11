@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
+from django.db.models import Count
 
 class QuestionManager(models.Manager):
     def all(self):
@@ -14,6 +15,11 @@ class QuestionManager(models.Manager):
 class TagManager(models.Manager):
     def popular_tags(self):
         return self.all().order_by('-rating')[:10]
+
+class ProfileManager(models.Manager):
+    def popular_users(self):
+        return self.annotate(question_count=Count('question'), answer_count=Count('answer')).order_by('-question_count', '-answer_count')[:5]
+
 
 class AnswerManager(models.Manager):
     def by_question(self, pk):
@@ -31,6 +37,8 @@ class Tag(models.Model):
 class Profile(models.Model):
     user_id = models.OneToOneField(User, on_delete=models.CASCADE, null=True, verbose_name='profile')
     avatar = models.ImageField(upload_to='avatar/%y/%m/%d')
+
+    objects = ProfileManager()
 
     def __str__(self):
         return self.user_id.get_username()
@@ -56,7 +64,7 @@ class QuestionLike(models.Model):
     def __str__(self):
         action = 'disliked' if self.is_like else 'liked'
         return f'{self.profile_id.user_id.get_username()} {action} question "{self.question_id.title}"'
-
+    
     class Meta:
         unique_together = ['question_id', 'profile_id']
 
