@@ -1,38 +1,9 @@
 from django.shortcuts import render
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
-
-#заглушка
-tags = [
-    {
-        'id': i, 
-        'name': f'tag{i}'
-    } for i in range(1, 11)
-]
-
-questions = [
-    {
-        'title': f'title {i}',
-        'id': i,
-        'text': f'This is text for question {i}',
-        'tags': [tags[i % len(tags)], tags[(i + 1) % len(tags)]]
-    } for i in range(1, 50)
-]
-
-answers = [
-    {
-        'username': f'username {i}',
-        'text': f'This is text for answer {i}'
-    } for i in range(1, 10)
-]
-
-users = [
-    {
-        'username': f'user{i}',
-    } for i in range(1, 6)
-]
+from .models import Profile, Question, Answer, Tag, QuestionLike, AnswerLike
 
 def paginate(objects_list, request, per_page=3, adjacent_pages=2):
-    page_number = int(request.GET.get('page', 1))
+    page_number = request.GET.get('page', 1)
     paginator = Paginator(objects_list, per_page)
     try:
         page_items = paginator.page(page_number)
@@ -42,102 +13,119 @@ def paginate(objects_list, request, per_page=3, adjacent_pages=2):
     except EmptyPage:
         page_items = paginator.page(paginator.num_pages)
         page_number = paginator.num_pages
+
+    page_number = int(page_number)
+
     total_pages = paginator.num_pages
     start_page = max(page_number - adjacent_pages, 1)
     end_page = min(page_number + adjacent_pages, total_pages)
     rang = list(range(start_page, end_page + 1))
-    return (page_items, page_number, total_pages, rang)
-
-def index(request):
-    popular_users = users
-    popular_tags = tags
-    answer_count = len(answers)
-    page_items, page_number, total_pages, rang = paginate(questions, request)
-    return render(request, 'index.html', {
-        'questions': page_items.object_list,
-        'page_items': page_items,
-        'page_number': page_number,
-        'total_pages': total_pages,
-        'rang': rang,
-        'popular_tags': popular_tags,
-        'popular_users': popular_users,
-        'answer_count': answer_count
-    })
-
-def ask(request):
-    popular_users = users
-    popular_tags = tags
-    return render(request, 'ask.html', {
-        'popular_tags': popular_tags,
-        'popular_users': popular_users
-    })
-
-def question(request, id_question):
-    question_item = questions[id_question - 1]
-    page_items, page_number, total_pages, rang = paginate(answers, request, per_page=5)
-    return render(request, 'question.html', {
-        'question': question_item,
-        'answers': page_items.object_list,
+    return {
         'page_items': page_items,
         'page_number': page_number,
         'total_pages': total_pages,
         'rang': rang
-    })
+    }
+
+def index(request):
+    popular_users = Profile.objects.all()[:5]
+    popular_tags = Tag.objects.popular_tags()
+    questions_page = paginate(Question.objects.all(), request)
+
+    context = {
+        'content': questions_page,
+        'popular_tags': popular_tags,
+        'popular_users': popular_users,
+    }
+
+    return render(request, 'index.html', context)
+
+def ask(request):
+    popular_users = Profile.objects.all()[:5]
+    popular_tags = Tag.objects.popular_tags()
+
+    context = {
+        'popular_tags': popular_tags,
+        'popular_users': popular_users
+    }
+
+    return render(request, 'ask.html', context)
+
+def question(request, id_question):
+    popular_users = Profile.objects.all()[:5]
+    popular_tags = Tag.objects.popular_tags()
+    question_item = Question.objects.get(id=id_question)
+    answers = Answer.objects.by_question(id_question)
+    content = paginate(answers, request, per_page=5)
+
+    context = {
+        'content': content,
+        'question': question_item,
+        'popular_tags': popular_tags,
+        'popular_users': popular_users,
+    }
+
+    return render(request, 'question.html', context)
+
 
 def tag(request, id_tag):
-    tag = tags[int(id_tag) - 1]
-    popular_users = users
-    popular_tags = tags
-    answer_count = len(answers)
-    page_items, page_number, total_pages, rang = paginate(questions, request)
-    return render(request, 'tag.html', {
-        'questions': page_items.object_list,
-        'page_items': page_items,
-        'page_number': page_number,
-        'total_pages': total_pages,
+    tag = Tag.objects.get(id=id_tag)
+    popular_users = Profile.objects.all()[:5]
+    popular_tags = Tag.objects.popular_tags()
+    questions = Question.objects.by_tag(tag)
+    content = paginate(questions, request)
+
+    context = {
+        'content': content,
         'tag': tag,
-        'rang': rang,
         'popular_tags': popular_tags,
         'popular_users': popular_users,
-        'answer_count': answer_count
-    })
+    }
+
+    return render(request, 'tag.html', context)
+
 
 def hot(request):
-    popular_users = users
-    popular_tags = tags
-    answer_count = len(answers)
-    page_items, page_number, total_pages, rang = paginate(questions, request)
-    return render(request, 'hot.html', {
-        'questions': page_items.object_list,
-        'page_items': page_items,
-        'page_number': page_number,
-        'total_pages': total_pages,
-        'rang': rang,
+    popular_users = Profile.objects.all()[:5]
+    popular_tags = Tag.objects.popular_tags()
+    questions = Question.objects.hot()
+    content = paginate(questions, request)
+
+    context = {
+        'content': content,
         'popular_tags': popular_tags,
         'popular_users': popular_users,
-        'answer_count': answer_count
-    })
+    }
+
+    return render(request, 'hot.html', context)
+
 
 def login(request):
-    popular_users = users
-    popular_tags = tags
-    return render(request, 'login.html', {
+    popular_users = Profile.objects.all()[:5]
+    popular_tags = Tag.objects.popular_tags()
+
+    context = {
         'popular_tags': popular_tags,
         'popular_users': popular_users
-    })
+    }
+    return render(request, 'login.html', context)
 
 def signup(request):
-    popular_users = users
-    popular_tags = tags
-    return render(request, 'signup.html', {
+    popular_users = Profile.objects.all()[:5]
+    popular_tags = Tag.objects.popular_tags()
+
+    context = {
         'popular_tags': popular_tags,
         'popular_users': popular_users
-    })
+    }
+    return render(request, 'signup.html', context)
 
 def settings(request):
-    popular_users = users
-    popular_tags = tags
-    return render(request, 'settings.html', {
+    popular_users = Profile.objects.all()[:5]
+    popular_tags = Tag.objects.popular_tags()
+
+    context = {
         'popular_tags': popular_tags,
         'popular_users': popular_users
-    })
+    }
+    return render(request, 'settings.html', context)

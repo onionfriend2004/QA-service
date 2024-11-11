@@ -11,7 +11,7 @@ main page
     <a href="{% url 'app:hot' %}">Hot Questions</a>
 </div>
 <div class="d-flex flex-column gap-3">
-    {% for question in questions %}
+    {% for question in content.page_items.object_list %}
         {% include "components/questioncard.html" %}
     {% endfor %}
 </div>

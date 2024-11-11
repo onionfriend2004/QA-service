@@ -8,7 +8,7 @@
                         <button class="btn btn-link p-0">
                             <img src="../static/img/up-arrow.png" alt="Up Vote" class="vote-icon">
                         </button>
-                        <div class="ms-2 me-2">5</div>
+                        <div class="ms-2 me-2"> {{ answer.rating }} </div>
                         <button class="btn btn-link p-0">
                             <img src="../static/img/down-arrow.png" alt="Down Vote" class="vote-icon">
                         </button>
@@ -16,10 +16,10 @@
                 </div>
             </div>
             <div class="col">
-                <h5 class="card-title">{{ answer.nickname }}</h5>
+                <h5 class="card-title">{{ answer.profile_id.user_id.get_username }}</h5>
                 <div>
                     <p class="card-text">
-                        {{ answer.text }}
+                        {{ answer.content }}
                     </p>
                 </div>
             </div>

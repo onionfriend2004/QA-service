@@ -8,7 +8,7 @@
                         <button class="btn btn-link p-0">
                             <img src="../static/img/up-arrow.png" alt="Up Vote" class="vote-icon">
                         </button>
-                        <div class="ms-2 me-2">5</div>
+                        <div class="ms-2 me-2">{{ question.rating }}</div>
                         <button class="btn btn-link p-0">
                             <img src="../static/img/down-arrow.png" alt="Down Vote" class="vote-icon">
                         </button>
@@ -23,17 +23,17 @@
                 </h5>
                 <div class="textboxQuestion">
                     <p class="card-text cardoverflow">
-                        {{ question.text }}
+                        {{ question.content }}
                     </p>
                 </div>
                 <div class="d-flex gap-5">
-                    <a href="{% url 'app:question' question.id %}#end" class="card-link btn btn-outline-primary">Answer ({{answer_count}})</a>
+                    <a href="{% url 'app:question' question.id %}#end" class="card-link btn btn-outline-primary">Answer ({{ question.answer_count }})</a>
                     <div>
                         Tags:
-                        {% for tag in question.tags%}
+                        {% for tag in question.tags.all %}
                             <span class="badge rounded-pill text-bg-primary">                        
                                 <a class="text-decoration-none text-reset" href="{% url 'app:tag'  tag.id %}">
-                                    {{tag.name}}
+                                    {{ tag.tag }}
                                 </a>
                             </span>
                         {% endfor %}

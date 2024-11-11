@@ -2,8 +2,8 @@
     <h2>Best members</h2>
     <div>
         <ul class="list-group list-group-flush">
-            {% for user in popular_users%}
-                <li class="list-group-item">{{ user.username }}</li>
+            {% for user in popular_users %}
+                <li class="list-group-item">{{ user.user_id.get_username }}</li>
             {% endfor %}
         </ul>
     </div>

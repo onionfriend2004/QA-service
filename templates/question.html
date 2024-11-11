@@ -8,7 +8,7 @@ question
 {% include "components/questioninfo.html" %}
 <hr>
 <div class="d-flex flex-column gap-3">
-    {% for answer in answers %}
+    {% for answer in content.page_items.object_list %}
         {% include "components/answer.html" %}
     {% endfor %}
 </div>

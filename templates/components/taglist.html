@@ -4,7 +4,7 @@
         {% for tag in popular_tags%}
             <span class="badge rounded-pill text-bg-primary">
                 <a class="text-decoration-none text-reset" href="{% url 'app:tag'  tag.id %}">
-                    {{tag.name}}
+                    {{ tag.tag }}
                 </a>
             </span>
         {% endfor %}
