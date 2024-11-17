@@ -2,6 +2,13 @@ from django.db import models
 from django.contrib.auth.models import User
 from django.db.models import Count
 
+from random import sample
+
+class ProfileManager(models.Manager):
+    def popular_users(self):
+        return self.annotate(question_count=Count('question'), answer_count=Count('answer')).order_by('-question_count', '-answer_count')[:5]
+
+    
 class QuestionManager(models.Manager):
     def all(self):
         return self.order_by('-created_at')
@@ -15,10 +22,6 @@ class QuestionManager(models.Manager):
 class TagManager(models.Manager):
     def popular_tags(self):
         return self.all().order_by('-rating')[:10]
-
-class ProfileManager(models.Manager):
-    def popular_users(self):
-        return self.annotate(question_count=Count('question'), answer_count=Count('answer')).order_by('-question_count', '-answer_count')[:5]
 
 
 class AnswerManager(models.Manager):
@@ -62,11 +65,29 @@ class QuestionLike(models.Model):
     is_like = models.BooleanField(default=True)
 
     def __str__(self):
-        action = 'disliked' if self.is_like else 'liked'
+        action = 'liked' if self.is_like else 'disliked'
         return f'{self.profile_id.user_id.get_username()} {action} question "{self.question_id.title}"'
+
+    def save(self, *args, **kwargs):
+        if not self.pk:
+            if self.is_like:
+                self.question_id.rating += 1
+            else:
+                self.question_id.rating -= 1
+            self.question_id.save()
+        super(QuestionLike, self).save(*args, **kwargs)
+
+    def delete(self, *args, **kwargs):
+        if self.is_like:
+            self.question_id.rating -= 1
+        else:
+            self.question_id.rating += 1
+        self.question_id.save()
+        super(QuestionLike, self).delete(*args, **kwargs)
     
     class Meta:
-        unique_together = ['question_id', 'profile_id']
+        unique_together = ['profile_id', 'question_id']
+    
 
 class Answer(models.Model):
     profile_id = models.ForeignKey(Profile, on_delete=models.CASCADE, verbose_name='author')
@@ -79,6 +100,17 @@ class Answer(models.Model):
 
     def __str__(self):
         return self.question_id.title
+    
+    def save(self, *args, **kwargs):
+        if not self.pk:
+            self.question_id.answer_count += 1
+            self.question_id.save()
+        super(Answer, self).save(*args, **kwargs)
+
+    def delete(self, *args, **kwargs):
+        self.question_id.answer_count -= 1
+        self.question_id.save()
+        super(Answer, self).delete(*args, **kwargs)
 
 class AnswerLike(models.Model):
     answer_id = models.ForeignKey(Answer, on_delete=models.CASCADE, verbose_name='answer')
@@ -86,8 +118,26 @@ class AnswerLike(models.Model):
     is_like = models.BooleanField(default=True)
 
     def __str__(self):
-        action = 'disliked' if self.is_like else 'liked'
+        action = 'liked' if self.is_like else 'disliked'
         return f'{self.profile_id.user_id.get_username()} {action} answer "{self.answer_id.content}"'
 
+    def save(self, *args, **kwargs):
+        if not self.pk:
+            if self.is_like:
+                self.answer_id.rating += 1
+            else:
+                self.answer_id.rating -= 1
+            self.answer_id.save()
+        super(AnswerLike, self).save(*args, **kwargs)
+
+    def delete(self, *args, **kwargs):
+        if self.is_like:
+            self.answer_id.rating -= 1
+        else:
+            self.answer_id.rating += 1
+        self.answer_id.save()
+        super(AnswerLike, self).delete(*args, **kwargs)
+    
+
     class Meta:
-        unique_together = ['answer_id', 'profile_id']
+        unique_together = ['profile_id', 'answer_id']
