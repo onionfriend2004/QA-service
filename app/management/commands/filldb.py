@@ -48,7 +48,6 @@ class Command(BaseCommand):
         users = []
         profiles = []
         for i in range(cnt):
-            print(i)
             user = User(
                 username=f'user{i}',
                 email=f'email{i}@mail.ru',
