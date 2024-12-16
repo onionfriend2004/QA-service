@@ -78,10 +78,10 @@ class SignUpForm(forms.ModelForm):
         user.set_password(self.cleaned_data['password'])
         if commit:
             user.save()
-            profile = Profile.objects.create(user=user)
+            profile = Profile.objects.create(user_id=user)
             if self.cleaned_data.get('avatar'):
                 profile.avatar = self.cleaned_data['avatar']
-                profile.save()
+            profile.save()
         return user
     
 class SettingsForm(forms.ModelForm):
@@ -233,7 +233,6 @@ class QuestionLikeForm:
                 rating = like.change_mind()
 
         return rating
-
 
 class AnswerLikeForm:
     def __init__(self, user, answer, is_like):
