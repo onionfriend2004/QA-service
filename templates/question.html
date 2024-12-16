@@ -1,4 +1,5 @@
 {% extends "./base/base.html" %}
+{% load static %}
 
 {% block title %}
 question
@@ -6,20 +7,42 @@ question
 
 {% block content %}
 {% include "components/questioninfo.html" %}
+
 <hr>
-<div class="d-flex flex-column gap-3">
-    {% for answer in content.page_items.object_list %}
-        {% include "components/answer.html" %}
-    {% endfor %}
-</div>
+{% if content.page_items.object_list %}
+    <div class="d-flex flex-column gap-3">
+        {% for answer in content.page_items.object_list %}
+            <div id="answer-{{ answer.id }}">
+                {% include "components/answer.html" %}
+            </div>
+        {% endfor %}
+    </div>
+{% else %}
+    <div class="d-flex justify-content-center align-items-center text-center">
+        <h3 class="text-muted">No answers</h3>
+    </div>
+{% endif %}
+
 {% include "components/pagination.html" %}
-<hr>
-<div class="">
-    <div class="form-group mb-3">
-        <textarea class="form-control" id="exampleFormControlTextarea1" rows="5"></textarea>
-    </div>
-    <div class="mb-3" id="end">
-        <button type="answer" class="btn btn-primary">Answer</button>
-    </div>
-</div>
+<hr id="end">
+
+{% if request.user.is_authenticated %}
+    <form method="post">
+        {% csrf_token %}
+            {% for form_field in form %}
+                <div class="form-group mb-3">
+                    {{ form.content }}
+                </div>
+            {% endfor %}
+        <div class="mb-3" id="end">
+            <button type="submit" class="btn btn-primary">Answer</button>
+        </div>
+    </form>
+{% endif %}
+
 {% endblock content %}
+
+{% block jscode %}
+    <script src="{% static './js/like.js' %}"></script>
+    <script src="{% static './js/is_correct.js' %}"></script>
+{% endblock jscode %}

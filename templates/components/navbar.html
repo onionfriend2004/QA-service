@@ -18,12 +18,12 @@
                     </li>
                     <li class="nav-item">
                         <div class="d-flex gap-1">
-                            <img src="../static/img/pfp.jpg" alt="Avatar" class="rounded-circle profilePicture">
+                            <img src="{{ request.user.profile.avatar.url }}" alt="Avatar" class="rounded-circle profilePicture">
                             <div class="d-flex flex-column">
-                                <div class="d-flex ms-2">Sigma</div>
+                                <div class="d-flex ms-2">{{ user.username }}</div>
                                 <div class="d-flex">
                                     <a class="nav-link me-2" href="{% url 'app:settings' %}">Settings</a>
-                                    <a class="nav-link" href="#">Log out</a>
+                                    <a class="nav-link" href="{% url 'app:logout' %}">Log out</a>
                                 </div>
                             </div>
                         </div>

@@ -1,6 +1,13 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
-from .models import Profile, Question, Answer, Tag, QuestionLike, AnswerLike
+from django.contrib.auth import authenticate, login as auth_login, logout as auth_logout
+from django.views.decorators.http import require_POST
+from django.contrib.auth.decorators import login_required
+from django.urls import reverse
+from django.http import JsonResponse
+
+from app.models import *
+from app.forms import *
 
 def paginate(objects_list, request, per_page=3, adjacent_pages=2):
     page_number = request.GET.get('page', 1)
@@ -27,6 +34,14 @@ def paginate(objects_list, request, per_page=3, adjacent_pages=2):
         'rang': rang
     }
 
+# TODO: сделать поиск за логарифм (список отсортирован по лайкам и времени)
+def get_page_for_new_answer(answers, new_answer, per_page=5):
+    answers_list = list(answers)
+    position = answers_list.index(new_answer) # O(n)
+    page_number = (position // per_page) + 1
+    
+    return page_number
+   
 def index(request):
     popular_users = Profile.objects.popular_users()
     popular_tags = Tag.objects.popular_tags()
@@ -40,25 +55,48 @@ def index(request):
 
     return render(request, 'index.html', context)
 
+@login_required
 def ask(request):
     popular_users = Profile.objects.popular_users()
     popular_tags = Tag.objects.popular_tags()
 
+    if request.method == 'GET':
+        form = QuestionForm()
+    else:
+        form = QuestionForm(request.user.profile, data=request.POST)
+        if form.is_valid():
+            question = form.save()
+            return redirect(reverse('app:question', kwargs={'question_id': question.id}))
+
     context = {
+        'form': form,
         'popular_tags': popular_tags,
         'popular_users': popular_users
     }
 
     return render(request, 'ask.html', context)
 
-def question(request, id_question):
+def question(request, question_id):
+    answers = Answer.objects.by_question(question_id)
     popular_users = Profile.objects.popular_users()
     popular_tags = Tag.objects.popular_tags()
-    question_item = Question.objects.get(id=id_question)
-    answers = Answer.objects.by_question(id_question)
+    question_item = Question.objects.get(id=question_id)
     content = paginate(answers, request, per_page=5)
 
+    if request.method == 'GET':
+        form = AnswerForm()
+    else:
+        if not request.user.is_authenticated:
+            return redirect(f"/login/?continue={request.get_full_path()}")
+        form = AnswerForm(profile_id=request.user.profile, question_id=question_item, data=request.POST)
+        if form.is_valid():
+            answer = form.save()
+            content = paginate(answers, request, per_page=5)
+            page_number = get_page_for_new_answer(answers, answer)
+            return redirect(reverse('app:question', kwargs={'question_id': question_id}) + f"?page={page_number}#answer-{answer.id}")
+
     context = {
+        'form': form,
         'content': content,
         'question': question_item,
         'popular_tags': popular_tags,
@@ -66,7 +104,6 @@ def question(request, id_question):
     }
 
     return render(request, 'question.html', context)
-
 
 def tag(request, id_tag):
     tag = Tag.objects.get(id=id_tag)
@@ -84,7 +121,6 @@ def tag(request, id_tag):
 
     return render(request, 'tag.html', context)
 
-
 def hot(request):
     popular_users = Profile.objects.popular_users()
     popular_tags = Tag.objects.popular_tags()
@@ -99,33 +135,106 @@ def hot(request):
 
     return render(request, 'hot.html', context)
 
-
 def login(request):
     popular_users = Profile.objects.popular_users()
     popular_tags = Tag.objects.popular_tags()
 
+    if request.method == 'GET':
+        form = LoginForm()
+    else:
+        form = LoginForm(data=request.POST)
+        if form.is_valid():
+            user = authenticate(request, **form.cleaned_data)
+            if user is not None:
+                auth_login(request, user)
+                return redirect(request.POST.get('continue', reverse('app:index')))
+            else:
+                form.add_error(None, 'Invalid login or password')
+
     context = {
+        'form': form,
         'popular_tags': popular_tags,
         'popular_users': popular_users
     }
     return render(request, 'login.html', context)
 
+def logout(request):
+    auth_logout(request)
+    previous_page = request.META.get('HTTP_REFERER')
+    if previous_page is not None:
+        return redirect(previous_page)
+    return redirect(reverse('app:index'))
+
 def signup(request):
     popular_users = Profile.objects.popular_users()
     popular_tags = Tag.objects.popular_tags()
 
+    if request.method == 'GET':
+        form = SignUpForm()
+    else:
+        form = SignUpForm(request.POST, request.FILES)
+        if form.is_valid():
+            user = form.save()
+            auth_login(request, user)
+            return redirect(reverse('app:index'))
+
     context = {
+        'form': form,
         'popular_tags': popular_tags,
         'popular_users': popular_users
     }
     return render(request, 'signup.html', context)
 
+@login_required
 def settings(request):
     popular_users = Profile.objects.popular_users()
     popular_tags = Tag.objects.popular_tags()
 
+    form_updated = False
+
+    if request.method == 'GET':
+        form = SettingsForm(user=request.user, instance=request.user)
+        avatar = ImageForm(instance=request.user.profile)
+        form_updated = request.GET.get('updated') == 'true'
+    else:
+        form = SettingsForm(data=request.POST, user=request.user, instance=request.user)
+        avatar = ImageForm(data=request.POST, files=request.FILES, instance=request.user.profile)
+
+        if form.is_valid() and avatar.is_valid():
+            user = form.save()
+            avatar.save()
+            form_updated = True
+            auth_login(request, user)
+            return redirect(reverse('app:settings') + '?updated=true')
+
     context = {
+        'form': form,
+        'avatar': avatar,
+        'form_updated': form_updated,
         'popular_tags': popular_tags,
         'popular_users': popular_users
     }
     return render(request, 'settings.html', context)
+
+@require_POST
+@login_required
+def like(request):
+    data = request.POST
+    rating = 0
+    if data['type'] == 'question':
+        form = QuestionLikeForm(user=request.user.profile, question=data['id'], is_like=(data['action'] == 'like'))
+        rating = form.save()
+    elif data['type'] == 'answer':
+        form = AnswerLikeForm(user=request.user.profile, answer=data['id'], is_like=(data['action'] == 'like'))
+        rating = form.save()
+
+    return JsonResponse({'rating': rating})
+
+@require_POST
+@login_required
+def is_correct(request):
+    data = request.POST
+    answer = Answer.objects.get(pk=data['id'])
+    if Answer.objects.filter(question_id=answer.question_id, is_correct=True).count() < 3 or answer.is_correct:
+        answer.change_mind_correct()
+    return JsonResponse({'action': answer.is_correct})

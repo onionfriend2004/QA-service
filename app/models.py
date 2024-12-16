@@ -25,8 +25,8 @@ class TagManager(models.Manager):
 
 
 class AnswerManager(models.Manager):
-    def by_question(self, pk):
-        return self.filter(question_id=pk).order_by('-rating', 'created_at')
+    def by_question(self, id):
+        return self.filter(question_id=id).order_by('-is_correct', '-rating', 'created_at')
 
 class Tag(models.Model):
     tag = models.CharField(unique=True, max_length=32, verbose_name='tag')
@@ -39,7 +39,7 @@ class Tag(models.Model):
 
 class Profile(models.Model):
     user_id = models.OneToOneField(User, on_delete=models.CASCADE, null=True, verbose_name='profile')
-    avatar = models.ImageField(upload_to='avatar/%y/%m/%d')
+    avatar = models.ImageField(default='img/blank_pfp.png', upload_to='avatar/%y/%m/%d', verbose_name='avatar')
 
     objects = ProfileManager()
 
@@ -69,7 +69,7 @@ class QuestionLike(models.Model):
         return f'{self.profile_id.user_id.get_username()} {action} question "{self.question_id.title}"'
 
     def save(self, *args, **kwargs):
-        if not self.pk:
+        if not self.id:
             if self.is_like:
                 self.question_id.rating += 1
             else:
@@ -94,6 +94,7 @@ class Answer(models.Model):
     question_id = models.ForeignKey(Question, on_delete=models.CASCADE, verbose_name='question')
     content = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)
+    is_correct = models.BooleanField(default=False)
     rating = models.IntegerField(default=0)
 
     objects = AnswerManager()
@@ -101,8 +102,12 @@ class Answer(models.Model):
     def __str__(self):
         return self.question_id.title
     
+    def change_mind_correct(self):
+        self.is_correct = not self.is_correct
+        self.save()
+
     def save(self, *args, **kwargs):
-        if not self.pk:
+        if not self.id:
             self.question_id.answer_count += 1
             self.question_id.save()
         super(Answer, self).save(*args, **kwargs)
@@ -122,7 +127,7 @@ class AnswerLike(models.Model):
         return f'{self.profile_id.user_id.get_username()} {action} answer "{self.answer_id.content}"'
 
     def save(self, *args, **kwargs):
-        if not self.pk:
+        if not self.id:
             if self.is_like:
                 self.answer_id.rating += 1
             else:

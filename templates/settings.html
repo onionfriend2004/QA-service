@@ -6,49 +6,57 @@ settings
 
 {% block content %}
 <div class="d-flex gap-3 align-items-center">
-    <h1>Settings: Sigma</h1>
+    <h1>Settings: {{ user.username }}</h1>
 </div>
 
-<div class="mb-3 text-danger" type="error">
-    Sorry, wrong password
+{% if form_updated %}
+<div class="alert alert-success" role="alert">
+  Changes saved successfully!
 </div>
+{% endif %}
 
-<div class="row mb-3">
-    <label for="form-elem-1" class="col-sm-2 col-form-label">Login</label>
-    <div class="col-sm-4">
-        <input type="login" id="form-elem-1" class="form-control" placeholder="Enter your login here" />
+{% if form.non_field_errors %}
+    <div class="mb-3 text-danger">
+        {{ form.non_field_errors }}
     </div>
-</div>
+{% endif %}
 
-<div class="row mb-3">
-    <label for="form-elem-1" class="col-sm-2 col-form-label">Email</label>
-    <div class="col-sm-4">
-        <input type="login" id="form-elem-1" class="form-control" placeholder="Enter your email here" />
-    </div>
-</div>
-
-<div class="row mb-3">
-    <label for="form-elem-1" class="col-sm-2 col-form-label">Nickname</label>
-    <div class="col-sm-4">
-        <input type="login" id="form-elem-1" class="form-control" placeholder="Enter your nickname here" />
-    </div>
-</div>
-
-<div class="row mb-3">
-    <label for="form-elem-1" class="col-sm-2 col-form-label">Upload avatar</label>
-    <div class="col-sm-4">
-        <div class="mb-2">
-            <img src="../static/img/pfp.jpg" alt="Avatar" class="img-thumbnail profilePictureSettings">
+<form method="post" novalidate enctype="multipart/form-data">
+    {% csrf_token %}
+    {% for form_field in form %}
+        <div class="row mb-3">
+            <label for="{{ form_field.id_for_label }}" class="col-sm-2 col-form-label">{{ form_field.label }}</label>
+            <div class="col-sm-4">
+                {{ form_field }}
+                <div class="invalid-feedback d-block">
+                    {{ form_field.errors }}
+                </div>
+            </div>
         </div>
-        <input class="form-control" type="file" id="formFile">
-    </div>
-</div>
+    {% endfor %}
 
-<div class="row mt-3">
-    <div class="col-2">
+    {% for form_field in avatar %}
+    <div class="row mb-3">
+        <div class="col-2">
+        </div>
+        <div class="col-sm-4">
+            <div class="mb-2">
+                <img src="{{ request.user.profile.avatar.url }}" alt="Avatar" class="img-thumbnail profilePictureSettings">
+            </div>
+            {{ avatar }}
+            <div class="invalid-feedback d-block">
+                {{ avatar.errors }}
+            </div>
+        </div>
     </div>
-    <div class="col-10">
-        <button type="button" class="btn btn-primary">Update profile</button>
+    {% endfor %}
+
+    <div class="row mt-3">
+        <div class="col-2">
+        </div>
+        <div class="col-10">
+            <button type="submit" class="btn btn-primary">Update profile</button>
+        </div>
     </div>
-</div>
+</form>
 {% endblock content %}

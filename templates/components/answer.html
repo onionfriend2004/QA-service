@@ -1,27 +1,35 @@
+{% load static %}
 <div class="card w-100">
     <div class="card-body">
         <div class="row">
             <div class="col-auto d-flex align-items-start">
                 <div class="d-flex flex-column align-items-center">
-                    <img src="../static/img/pfp.jpg" alt="Avatar" class="img-thumbnail profilePictureQuestion mb-2">
-                    <div class="d-flex align-items-center bg-light rounded p-2">
-                        <button class="btn btn-link p-0">
-                            <img src="../static/img/up-arrow.png" alt="Up Vote" class="vote-icon">
-                        </button>
-                        <div class="ms-2 me-2"> {{ answer.rating }} </div>
-                        <button class="btn btn-link p-0">
-                            <img src="../static/img/down-arrow.png" alt="Down Vote" class="vote-icon">
-                        </button>
-                    </div>                  
+                    <img src="{{ answer.profile_id.avatar.url }}" alt="Avatar" class="img-thumbnail profilePictureQuestion mb-2">
+                    {% include "components/like.html" with type="answer" id=answer.id rating=answer.rating %}
                 </div>
             </div>
             <div class="col">
                 <h5 class="card-title">{{ answer.profile_id.user_id.get_username }}</h5>
-                <div>
-                    <p class="card-text">
-                        {{ answer.content }}
-                    </p>
-                </div>
+                <p class="card-text">
+                    {{ answer.content }}
+                    <form method="post">
+                        {% csrf_token %}
+                        <div class="form-check is-valid">
+                            {% if question.profile_id == request.user.profile %}
+                            <input class="js-correct" data-id="{{ answer.id }}" type="checkbox" id="correct-{{ answer.id }}" {% if answer.is_correct %} checked {% endif %}>
+                            <label class="form-check-label" for="correct-{{ answer.id }}" {% if answer.is_correct %} style="color: #28a745;" {% endif %}>
+                                Correct!
+                            </label>
+                            {% else %}
+                                {% if answer.is_correct %}
+                                    <label class="form-check-label" for="correct-{{ answer.id }}" {% if answer.is_correct %} style="color: #28a745;" {% endif %}>
+                                        Correct!
+                                    </label>
+                                {% endif %}
+                            {% endif %}
+                        </div>
+                    </form>
+                </p>
             </div>
         </div>
     </div>

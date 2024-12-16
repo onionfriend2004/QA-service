@@ -57,7 +57,6 @@ class Command(BaseCommand):
             users.append(user)
             profiles.append(Profile(
                 user_id=user,
-                avatar="img/ava" + str(i % 7) + ".png",
             ))
         User.objects.bulk_create(users)
         Profile.objects.bulk_create(profiles)

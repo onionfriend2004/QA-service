@@ -1,4 +1,5 @@
 {% extends "./base/base.html" %}
+{% load static %}
 
 {% block title %}
 hot
@@ -15,3 +16,7 @@ hot
 </div>
 {% include "components/pagination.html" %}
 {% endblock content %}
+
+{% block jscode %}
+    <script src="{% static './js/like.js' %}"></script>
+{% endblock jscode %}

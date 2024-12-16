@@ -10,7 +10,7 @@
 </head>
 <body class="d-flex flex-column min-vh-100">
     <header>
-        {% if True %}
+        {% if user.is_authenticated %}
             {% include "components/navbar.html" %}
         {% else %}
             {% include "components/guestnavbar.html" %}
@@ -31,7 +31,12 @@
     </main>
 
     {% include "components/footer.html" %}
+    
+    <script src="{% static '/js/jquery.min.js' %}"></script>
+    <script src="{% static './js/csrf.js' %}"></script>
+    <script src="{% static './js/bootstrap.min.js' %}"></script>
 
-    <script src="{% static 'js/bootstrap.min.js' %}"></script>
+    {% block jscode %}
+	{% endblock %}
 </body>
 </html>
