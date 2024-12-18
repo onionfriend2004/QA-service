@@ -84,6 +84,16 @@ class QuestionLike(models.Model):
             self.question_id.rating += 1
         self.question_id.save()
         super(QuestionLike, self).delete(*args, **kwargs)
+
+    def change_mind(self):
+        if self.is_like:
+            self.question_id.rating -= 2
+        else:
+            self.question_id.rating += 2
+        self.is_like = not self.is_like
+        self.save()
+        self.question_id.save()
+        return self.question_id.rating
     
     class Meta:
         unique_together = ['profile_id', 'question_id']
@@ -143,6 +153,15 @@ class AnswerLike(models.Model):
         self.answer_id.save()
         super(AnswerLike, self).delete(*args, **kwargs)
     
-
+    def change_mind(self):
+        if self.is_like:
+            self.answer_id.rating -= 2
+        else:
+            self.answer_id.rating += 2
+        self.is_like = not self.is_like
+        self.save()
+        self.answer_id.save()
+        return self.answer_id.rating
+    
     class Meta:
         unique_together = ['profile_id', 'answer_id']
