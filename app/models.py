@@ -23,7 +23,6 @@ class TagManager(models.Manager):
     def popular_tags(self):
         return self.all().order_by('-rating')[:10]
 
-
 class AnswerManager(models.Manager):
     def by_question(self, id):
         return self.filter(question_id=id).order_by('-is_correct', '-rating', 'created_at')
@@ -76,6 +75,7 @@ class QuestionLike(models.Model):
                 self.question_id.rating -= 1
             self.question_id.save()
         super(QuestionLike, self).save(*args, **kwargs)
+        return self.question_id.rating
 
     def delete(self, *args, **kwargs):
         if self.is_like:
@@ -84,6 +84,7 @@ class QuestionLike(models.Model):
             self.question_id.rating += 1
         self.question_id.save()
         super(QuestionLike, self).delete(*args, **kwargs)
+        return self.question_id.rating
 
     def change_mind(self):
         if self.is_like:
@@ -144,6 +145,7 @@ class AnswerLike(models.Model):
                 self.answer_id.rating -= 1
             self.answer_id.save()
         super(AnswerLike, self).save(*args, **kwargs)
+        return self.answer_id.rating
 
     def delete(self, *args, **kwargs):
         if self.is_like:
@@ -152,7 +154,8 @@ class AnswerLike(models.Model):
             self.answer_id.rating += 1
         self.answer_id.save()
         super(AnswerLike, self).delete(*args, **kwargs)
-    
+        return self.answer_id.rating
+
     def change_mind(self):
         if self.is_like:
             self.answer_id.rating -= 2

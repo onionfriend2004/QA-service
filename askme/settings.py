@@ -25,7 +25,7 @@ SECRET_KEY = 'django-insecure-#8j27fo7nmhy$fmro_nld93l6z(v$i$1d!axr$sd1ok0i*q2a*
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['localhost', '127.0.0.1', '0.0.0.0']
+ALLOWED_HOSTS = []
 
 
 # Application definition
@@ -50,6 +50,8 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
+
+CSRF_TRUSTED_ORIGINS = ['http://localhost:8081']
 
 ROOT_URLCONF = 'askme.urls'
 
@@ -126,6 +128,9 @@ STATICFILES_DIRS = [
     BASE_DIR / "static",
 ]
 
+MEDIA_ROOT = BASE_DIR / 'uploads'
+MEDIA_URL = '/uploads/'
+
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
 
@@ -134,6 +139,3 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 # App settings
 
 LOGIN_URL = '/login/'
-
-MEDIA_ROOT = BASE_DIR / 'uploads'
-MEDIA_URL = '/uploads/'

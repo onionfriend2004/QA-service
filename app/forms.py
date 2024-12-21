@@ -198,12 +198,21 @@ class QuestionForm(forms.ModelForm):
         self._profile_id = profile_id
         super(QuestionForm, self).__init__(**kwargs)
 
+    def clean_tags(self):
+        tags_str = self.cleaned_data.get('tags', '')
+        tags_list = [tag.strip() for tag in tags_str.split(',') if tag.strip()]
+
+        if len(tags_list) > 3:
+            raise ValidationError("You can enter a maximum of 3 tags.")
+
+        return tags_str
+
     def save(self, commit=True):
         tags_str = self.cleaned_data.pop('tags')
         tags_list = [tag.strip() for tag in tags_str.split(',') if tag.strip()]
 
         question = super().save(commit=False)
-        question.profile_id = self._profile_id 
+        question.profile_id = self._profile_id
 
         if commit:
             question.save()
