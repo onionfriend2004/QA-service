@@ -9,32 +9,32 @@ question
 {% include "components/questioninfo.html" %}
 
 <hr>
-{% if content.page_items.object_list %}
-    <div class="d-flex flex-column gap-3">
+<div id="answers-container" class="d-flex flex-column gap-3">
+    {% if content.page_items.object_list %}
         {% for answer in content.page_items.object_list %}
             <div id="answer-{{ answer.id }}">
                 {% include "components/answer.html" %}
             </div>
         {% endfor %}
-    </div>
-{% else %}
-    <div class="d-flex justify-content-center align-items-center text-center">
-        <h3 class="text-muted">No answers</h3>
-    </div>
-{% endif %}
+    {% else %}
+        <div class="d-flex justify-content-center align-items-center text-center">
+            <h3 class="text-muted">No answers</h3>
+        </div>
+    {% endif %}
+</div>
 
 {% include "components/pagination.html" %}
 <hr id="end">
 
 {% if request.user.is_authenticated %}
-    <form method="post">
+    <form method="post" id="answer-form">
         {% csrf_token %}
-            {% for form_field in form %}
-                <div class="form-group mb-3">
-                    {{ form.content }}
-                </div>
-            {% endfor %}
-        <div class="mb-3" id="end">
+        {% for form_field in form %}
+            <div class="form-group mb-3">
+                {{ form.content }}
+            </div>
+        {% endfor %}
+        <div class="mb-3">
             <button type="submit" class="btn btn-primary">Answer</button>
         </div>
     </form>
@@ -45,4 +45,15 @@ question
 {% block jscode %}
     <script src="{% static './js/like.js' %}"></script>
     <script src="{% static './js/is_correct.js' %}"></script>
+    <script>
+        const centrifuge = new Centrifuge("{{ ws_url }}", {
+            token: "{{ token }}"
+        });
+        const sub = centrifuge.newSubscription('room:{{ question.id }}');
+        sub.on('publication', function(ctx) {
+            console.log(ctx.data);
+        })
+        sub.subscribe();
+        centrifuge.connect();
+    </script>
 {% endblock jscode %}

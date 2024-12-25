@@ -1,9 +1,9 @@
 from django.core.management.base import BaseCommand
 from django.contrib.auth.models import User
+from django.contrib.postgres.search import SearchVector
 from app.models import Profile, Question, Answer, Tag, QuestionLike, AnswerLike
 from random import choice, sample, randint
 from faker import Faker
-from django.db import transaction
 
 f = Faker()
 
@@ -84,6 +84,8 @@ class Command(BaseCommand):
             questions.append(q)
         Question.objects.bulk_create(questions)
         for q in questions:
+            q.search = SearchVector('title', 'content')
+            q.save(update_fields=['search'])
             q.tags.set(sample(tags, k=randint(1, 3)))
 
     @staticmethod

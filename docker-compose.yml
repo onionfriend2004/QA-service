@@ -1,6 +1,8 @@
 services:
   django:
-    build: .
+    build: 
+      context: .
+      dockerfile: Dockerfile.django
     container_name: django
     command: gunicorn -c wsgi/gunicorn.conf.py askme.wsgi:application
     volumes:
@@ -29,6 +31,23 @@ services:
       - ./uploads:/usr/src/app/uploads
     depends_on:
       - django
+
+  centrifugo:
+    image: centrifugo/centrifugo:v3
+    container_name: centrifugo
+    ports:
+      - "8010:8000"
+    command: centrifugo -c config.json
+    volumes:
+      - ./centrifugo/config.json:/centrifugo/config.json
+    depends_on:
+      - django
+
+  memcached:
+    image: memcached:alpine
+    container_name: memcached
+    ports:
+      - "11211:11211"
 
 volumes:
   pgdbdata: null

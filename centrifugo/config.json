@@ -1,0 +1,11 @@
+{
+    "log_level": "debug",
+    "token_hmac_secret_key": "bbe7d157-a253-4094-9759-06a8236543f9",
+    "admin": true,
+    "admin_password": "admin",
+    "admin_secret": "secret",
+    "allowed_origins": [
+      "http://localhost:8081"
+    ],
+    "allow_subscribe_for_client": true
+  }

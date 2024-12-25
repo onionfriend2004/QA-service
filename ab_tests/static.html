@@ -1,0 +1,401 @@
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>
+main page
+</title>
+    <link rel="stylesheet" href="/static/css/bootstrap.min.css" type="text/css">
+    <link rel="stylesheet" href="/static/css/custom.css" type="text/css">
+</head>
+<body class="d-flex flex-column min-vh-100">
+    <header>
+        
+            <nav class="navbar navbar-expand-lg bg-body-tertiary">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="/">AskMe</a>
+
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <div class="d-flex w-100 justify-content-between align-items-center">
+                <div class="d-flex">
+                    <input id="searchfield" class="form-control me-2" type="search" placeholder="Type question" aria-label="search">
+                    <button id="search" class="btn btn-outline-primary" type="submit">Search</button>
+                </div>
+                <ul class="navbar-nav d-flex align-items-center">
+                    <li class="nav-item me-2">
+                        <a href="/ask/" class="btn btn-primary">Ask</a>
+                    </li>
+                    <li class="nav-item">
+                        <div class="d-flex gap-1">
+                            <img src="/uploads/avatar/24/12/25/coursework-%D0%93%D0%BB%D0%B0%D0%B2%D0%BD%D0%BE%D0%B5_%D0%BC%D0%B5%D0%BD%D1%8E.drawio.png" alt="Avatar" class="rounded-circle profilePicture">
+                            <div class="d-flex flex-column">
+                                <div class="d-flex ms-2">bober</div>
+                                <div class="d-flex">
+                                    <a class="nav-link me-2" href="/settings/">Settings</a>
+                                    <a class="nav-link" href="/logout/">Log out</a>
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</nav>
+
+<!-- Результаты поиска с использованием Bootstrap -->
+<div id="resultsmenu" class="dropdown-menu w-100" style="display: none; max-height: 300px; overflow-y: auto;">
+    <div id="search-placeholder" class="dropdown-item text-muted" style="display: block;">Start typing to search...</div>
+    <div id="no-results" class="dropdown-item text-muted" style="display: none;">No results found.</div>
+    <div id="loading" class="dropdown-item text-muted" style="display: none;">Loading...</div>
+    
+    <!-- Пример результата, блок будет скрыт, пока не будут получены реальные данные -->
+    <div id="result-template" class="dropdown-item d-flex align-items-center" style="display: none;">
+        <a href="#" class="d-flex w-100">
+            <div class="text-truncate">Result Title</div>
+        </a>
+    </div>
+</div>
+
+        
+    </header>
+
+    <main class="container">
+        <div class="row mt-3">
+            <div class="col-9 mb-3">
+                
+<div class="d-flex gap-3 align-items-center">
+    <h1>New Questions</h1>
+    <a href="/hot/">Hot Questions</a>
+</div>
+<div class="d-flex flex-column gap-3">
+    
+        
+<div class="card w-100">
+    <div class="card-body">
+        <div class="row">
+            <div class="col-auto d-flex align-items-start">
+                <div class="d-flex flex-column align-items-center">
+                    <img src="/uploads/avatar/24/12/25/coursework-%D0%93%D0%BB%D0%B0%D0%B2%D0%BD%D0%BE%D0%B5_%D0%BC%D0%B5%D0%BD%D1%8E.drawio.png" alt="Avatar" class="img-thumbnail profilePictureQuestion mb-2">
+                    
+<div class="d-flex align-items-center bg-light rounded p-2">
+    
+        <button class="btn btn-link p-0 js-like" data-type="question" data-id="1007" data-action="like">
+            <img src="/static/img/up-arrow.png" alt="Up Vote" class="vote-icon">
+        </button>
+        <div class="ms-2 me-2" id="rating-1007">0</div>
+        <button class="btn btn-link p-0 js-like" data-type="question" data-id="1007" data-action="dislike">
+            <img src="/static/img/down-arrow.png" alt="Down Vote" class="vote-icon">
+        </button>
+    
+</div>
+                </div>
+            </div>
+            <div class="col">
+                <h5 class="card-title">
+                    <a class="text-decoration-none text-reset" href="/question/1007">
+                        tag
+                    </a>
+                </h5>
+                <div class="textboxQuestion">
+                    <p class="card-text cardoverflow">
+                        123
+                    </p>
+                </div>
+                <div class="d-flex gap-5">
+                    <a href="/question/1007#end" class="card-link btn btn-outline-primary">Answer (0)</a>
+                    <div>
+                        Tags:
+                        
+                            <span class="badge rounded-pill text-bg-primary">                        
+                                <a class="text-decoration-none text-reset" href="/tag/2">
+                                    tag1
+                                </a>
+                            </span>
+                        
+                            <span class="badge rounded-pill text-bg-primary">                        
+                                <a class="text-decoration-none text-reset" href="/tag/3">
+                                    tag2
+                                </a>
+                            </span>
+                        
+                            <span class="badge rounded-pill text-bg-primary">                        
+                                <a class="text-decoration-none text-reset" href="/tag/4">
+                                    tag3
+                                </a>
+                            </span>
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+    
+        
+<div class="card w-100">
+    <div class="card-body">
+        <div class="row">
+            <div class="col-auto d-flex align-items-start">
+                <div class="d-flex flex-column align-items-center">
+                    <img src="/uploads/avatar/24/12/25/coursework-%D0%93%D0%BB%D0%B0%D0%B2%D0%BD%D0%BE%D0%B5_%D0%BC%D0%B5%D0%BD%D1%8E.drawio.png" alt="Avatar" class="img-thumbnail profilePictureQuestion mb-2">
+                    
+<div class="d-flex align-items-center bg-light rounded p-2">
+    
+        <button class="btn btn-link p-0 js-like" data-type="question" data-id="1006" data-action="like">
+            <img src="/static/img/up-arrow.png" alt="Up Vote" class="vote-icon">
+        </button>
+        <div class="ms-2 me-2" id="rating-1006">0</div>
+        <button class="btn btn-link p-0 js-like" data-type="question" data-id="1006" data-action="dislike">
+            <img src="/static/img/down-arrow.png" alt="Down Vote" class="vote-icon">
+        </button>
+    
+</div>
+                </div>
+            </div>
+            <div class="col">
+                <h5 class="card-title">
+                    <a class="text-decoration-none text-reset" href="/question/1006">
+                        xxc
+                    </a>
+                </h5>
+                <div class="textboxQuestion">
+                    <p class="card-text cardoverflow">
+                        zxc
+                    </p>
+                </div>
+                <div class="d-flex gap-5">
+                    <a href="/question/1006#end" class="card-link btn btn-outline-primary">Answer (7)</a>
+                    <div>
+                        Tags:
+                        
+                            <span class="badge rounded-pill text-bg-primary">                        
+                                <a class="text-decoration-none text-reset" href="/tag/104">
+                                    1
+                                </a>
+                            </span>
+                        
+                            <span class="badge rounded-pill text-bg-primary">                        
+                                <a class="text-decoration-none text-reset" href="/tag/105">
+                                    2
+                                </a>
+                            </span>
+                        
+                            <span class="badge rounded-pill text-bg-primary">                        
+                                <a class="text-decoration-none text-reset" href="/tag/106">
+                                    3
+                                </a>
+                            </span>
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+    
+        
+<div class="card w-100">
+    <div class="card-body">
+        <div class="row">
+            <div class="col-auto d-flex align-items-start">
+                <div class="d-flex flex-column align-items-center">
+                    <img src="/uploads/avatar/24/12/25/coursework-%D0%93%D0%BB%D0%B0%D0%B2%D0%BD%D0%BE%D0%B5_%D0%BC%D0%B5%D0%BD%D1%8E.drawio.png" alt="Avatar" class="img-thumbnail profilePictureQuestion mb-2">
+                    
+<div class="d-flex align-items-center bg-light rounded p-2">
+    
+        <button class="btn btn-link p-0 js-like" data-type="question" data-id="1005" data-action="like">
+            <img src="/static/img/up-arrow.png" alt="Up Vote" class="vote-icon">
+        </button>
+        <div class="ms-2 me-2" id="rating-1005">1</div>
+        <button class="btn btn-link p-0 js-like" data-type="question" data-id="1005" data-action="dislike">
+            <img src="/static/img/down-arrow.png" alt="Down Vote" class="vote-icon">
+        </button>
+    
+</div>
+                </div>
+            </div>
+            <div class="col">
+                <h5 class="card-title">
+                    <a class="text-decoration-none text-reset" href="/question/1005">
+                        cxc
+                    </a>
+                </h5>
+                <div class="textboxQuestion">
+                    <p class="card-text cardoverflow">
+                        xcx
+                    </p>
+                </div>
+                <div class="d-flex gap-5">
+                    <a href="/question/1005#end" class="card-link btn btn-outline-primary">Answer (3)</a>
+                    <div>
+                        Tags:
+                        
+                            <span class="badge rounded-pill text-bg-primary">                        
+                                <a class="text-decoration-none text-reset" href="/tag/104">
+                                    1
+                                </a>
+                            </span>
+                        
+                            <span class="badge rounded-pill text-bg-primary">                        
+                                <a class="text-decoration-none text-reset" href="/tag/105">
+                                    2
+                                </a>
+                            </span>
+                        
+                            <span class="badge rounded-pill text-bg-primary">                        
+                                <a class="text-decoration-none text-reset" href="/tag/106">
+                                    3
+                                </a>
+                            </span>
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+    
+</div>
+<nav aria-label="Pagination" class="mt-3">
+    
+    <ul class="pagination">
+        
+
+        
+            <li class="page-item  active">
+                <a class="page-link" href="?page=1">1</a>
+            </li>
+        
+            <li class="page-item ">
+                <a class="page-link" href="?page=2">2</a>
+            </li>
+        
+            <li class="page-item ">
+                <a class="page-link" href="?page=3">3</a>
+            </li>
+        
+
+        
+            <li class="page-item">
+                <a class="page-link" href="?page=2">Next</a>
+            </li>
+        
+    </ul>
+    
+</nav>
+
+            </div>
+            <div class="col">
+                <section class="mt-5">
+    <h2>Popular Tags</h2>
+    <div>
+        
+            <span class="badge rounded-pill text-bg-primary">
+                <a class="text-decoration-none text-reset" href="/tag/2">
+                    tag1
+                </a>
+            </span>
+        
+            <span class="badge rounded-pill text-bg-primary">
+                <a class="text-decoration-none text-reset" href="/tag/3">
+                    tag2
+                </a>
+            </span>
+        
+            <span class="badge rounded-pill text-bg-primary">
+                <a class="text-decoration-none text-reset" href="/tag/4">
+                    tag3
+                </a>
+            </span>
+        
+            <span class="badge rounded-pill text-bg-primary">
+                <a class="text-decoration-none text-reset" href="/tag/5">
+                    tag4
+                </a>
+            </span>
+        
+            <span class="badge rounded-pill text-bg-primary">
+                <a class="text-decoration-none text-reset" href="/tag/6">
+                    tag5
+                </a>
+            </span>
+        
+            <span class="badge rounded-pill text-bg-primary">
+                <a class="text-decoration-none text-reset" href="/tag/7">
+                    tag6
+                </a>
+            </span>
+        
+            <span class="badge rounded-pill text-bg-primary">
+                <a class="text-decoration-none text-reset" href="/tag/8">
+                    tag7
+                </a>
+            </span>
+        
+            <span class="badge rounded-pill text-bg-primary">
+                <a class="text-decoration-none text-reset" href="/tag/9">
+                    tag8
+                </a>
+            </span>
+        
+            <span class="badge rounded-pill text-bg-primary">
+                <a class="text-decoration-none text-reset" href="/tag/10">
+                    tag9
+                </a>
+            </span>
+        
+            <span class="badge rounded-pill text-bg-primary">
+                <a class="text-decoration-none text-reset" href="/tag/1">
+                    tag0
+                </a>
+            </span>
+        
+    </div>
+</section>
+                <section class="mt-5">
+    <h2>Best members</h2>
+    <div>
+        <ul class="list-group list-group-flush">
+            
+                <li class="list-group-item">user5</li>
+            
+                <li class="list-group-item">user26</li>
+            
+                <li class="list-group-item">user51</li>
+            
+                <li class="list-group-item">user81</li>
+            
+                <li class="list-group-item">user94</li>
+            
+        </ul>
+    </div>
+</section>
+            </div>
+        </div>
+    </main>
+
+    <footer class="footer mt-auto py-3 bg-body-tertiary">
+    <div class="container">
+        <span class="text-muted">© 2024 Lupenkov</span>
+    </div>
+</footer>
+    
+    <script src="/static/js/jquery.min.js"></script>
+    <script src="/static/js/csrf.js"></script>
+    <script src="/static/js/bootstrap.min.js"></script>
+    <script src="/static/js/search.js"></script>
+    <script src="https://unpkg.com/centrifuge@5.0.0/dist/centrifuge.js"></script>
+
+    
+    <script src="/static/js/like.js"></script>
+
+</body>
+</html>

@@ -5,12 +5,12 @@
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
-        
+
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <div class="d-flex w-100 justify-content-between align-items-center">
                 <form class="d-flex">
-                    <input class="form-control me-2" type="search" placeholder="Type question" aria-label="search">
-                    <button class="btn btn-outline-primary" type="submit">Search</button>
+                    <input id="searchfield" class="form-control me-2" type="search" placeholder="Type question" aria-label="search">
+                    <button id="search" class="btn btn-outline-primary" type="submit">Search</button>
                 </form>
                 <ul class="navbar-nav d-flex align-items-center">
                     <li class="nav-item me-2">
@@ -23,7 +23,7 @@
                             {% else %}
                                 <a class="nav-link" href="{% url 'app:login' %}?continue={{ request.get_full_path }}">Log In</a>
                             {% endif %}
-                                <a class="nav-link me-2" href="{% url 'app:signup' %}">Register</a>
+                            <a class="nav-link me-2" href="{% url 'app:signup' %}">Register</a>
                         </div>
                     </li>
                 </ul>

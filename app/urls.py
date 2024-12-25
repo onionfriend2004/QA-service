@@ -15,4 +15,5 @@ urlpatterns = [
     path('settings/', views.settings, name='settings'),
     path('like/', views.like, name='like'),
     path('correct/', views.is_correct, name='correct'),
+    path('search/', views.search, name="search"),
 ]

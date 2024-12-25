@@ -37,8 +37,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'app',
     'django.contrib.postgres',
+    'app',
 ]
 
 MIDDLEWARE = [
@@ -66,6 +66,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'app.context_processors.global_settings',
             ],
         },
     },
@@ -87,7 +88,6 @@ DATABASES = {
         'PORT': '5432',  # Порт базы данных
     }
 }
-
 
 # Password validation
 # https://docs.djangoproject.com/en/5.1/ref/settings/#auth-password-validators
@@ -139,3 +139,6 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 # App settings
 
 LOGIN_URL = '/login/'
+
+CENTRIFUGO_SECRET_KEY = 'bbe7d157-a253-4094-9759-06a8236543f9'
+CENTRIFUGO_WS_URL = 'ws://localhost:8010/connection/websocket'

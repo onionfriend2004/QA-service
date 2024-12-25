@@ -2,7 +2,9 @@ from django.db import models
 from django.contrib.auth.models import User
 from django.db.models import Count
 
-from random import sample
+from django.contrib.postgres.search import SearchVector, SearchVectorField
+from django.contrib.postgres.indexes import GinIndex
+from django.db.models import Q
 
 class ProfileManager(models.Manager):
     def popular_users(self):
@@ -18,7 +20,7 @@ class QuestionManager(models.Manager):
 
     def hot(self):
         return self.order_by('-rating', '-created_at')
-
+    
 class TagManager(models.Manager):
     def popular_tags(self):
         return self.all().order_by('-rating')[:10]
@@ -53,10 +55,16 @@ class Question(models.Model):
     tags = models.ManyToManyField(Tag)
     rating = models.IntegerField(default=0)
     answer_count = models.IntegerField(default=0)
+    search = SearchVectorField(null=True)
     objects = QuestionManager()
 
     def __str__(self):
         return self.title
+    def save(self, *args, **kwargs):
+        self.search = SearchVector('title', 'content')
+        super().save(*args, **kwargs)
+    class Meta:
+        indexes = [GinIndex(fields=['search'])]
 
 class QuestionLike(models.Model):
     question_id = models.ForeignKey(Question, on_delete=models.CASCADE, verbose_name='question')

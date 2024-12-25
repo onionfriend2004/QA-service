@@ -6,8 +6,12 @@ from django.contrib.auth.decorators import login_required
 from django.urls import reverse
 from django.http import JsonResponse
 
+from django.contrib.postgres.search import SearchQuery, SearchRank
+from django.db.models import Q, F
+
 from app.models import *
 from app.forms import *
+from app.utils import get_centrifugo_info
 
 def paginate(objects_list, request, per_page=3, adjacent_pages=2):
     page_number = request.GET.get('page', 1)
@@ -34,14 +38,13 @@ def paginate(objects_list, request, per_page=3, adjacent_pages=2):
         'rang': rang
     }
 
-# TODO: сделать поиск за логарифм (список отсортирован по лайкам и времени)
 def get_page_for_new_answer(answers, new_answer, per_page=5):
     answers_list = list(answers)
-    position = answers_list.index(new_answer) # O(n)
+    position = answers_list.index(new_answer)
     page_number = (position // per_page) + 1
     
     return page_number
-   
+
 def index(request):
     popular_users = Profile.objects.popular_users()
     popular_tags = Tag.objects.popular_tags()
@@ -101,6 +104,7 @@ def question(request, question_id):
         'question': question_item,
         'popular_tags': popular_tags,
         'popular_users': popular_users,
+        **get_centrifugo_info()
     }
 
     return render(request, 'question.html', context)
@@ -238,3 +242,17 @@ def is_correct(request):
     if Answer.objects.filter(question_id=answer.question_id, is_correct=True).count() < 3 or answer.is_correct:
         answer.change_mind_correct()
     return JsonResponse({'action': answer.is_correct})
+
+@require_POST
+def search(request):
+    q = request.POST.get('query', '')
+    if q:
+        q = ' '.join(q.split())
+    query = SearchQuery(q)
+    queryset = Question.objects.annotate(
+        rank=SearchRank(F('search'), query)
+    ).filter(Q(rank__gte=0.03)).order_by('-rank')
+
+    results = [{'title': question.title, 'url': reverse('app:question', kwargs={'question_id': question.id})} for question in queryset]
+    print(results)
+    return JsonResponse({'results': results})
