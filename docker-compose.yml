@@ -4,6 +4,8 @@ services:
       context: .
       dockerfile: Dockerfile.django
     container_name: django
+    ports:
+      - "8000:8000"
     command: gunicorn -c wsgi/gunicorn.conf.py askme.wsgi:application
     volumes:
       - .:/usr/src/app
