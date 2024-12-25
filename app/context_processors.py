@@ -8,13 +8,8 @@ def global_settings(request):
     global flag
     popular_tags = cache.get("popular_tags")
     best_members = cache.get("popular_users")
-    if popular_tags is None:
-        if not flag:
-            flag = True
-            updateCache()
-            flag = False
-        while flag:
-            time.sleep(1)
+    if popular_tags is None or best_members is None:
+        updateCache()
         popular_tags = cache.get("popular_tags")
         best_members = cache.get("popular_users")
 

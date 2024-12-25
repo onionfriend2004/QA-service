@@ -1,18 +1,22 @@
 def application(environ, start_response):
     method = environ["REQUEST_METHOD"]
+
+    params = []
+
     if method == "GET":
         query_string = environ["QUERY_STRING"]
-        params = query_string.split("&")
-    elif method == "POST":
+        if query_string:
+            params.extend(query_string.split("&"))
+
+    if method == "POST":
         try:
             request_body_size = int(environ.get("CONTENT_LENGTH", 0))
         except ValueError:
             request_body_size = 0
 
         request_body = environ["wsgi.input"].read(request_body_size)
-        params = request_body.decode("utf-8").split("&")
-    else:
-        params = []
+        if request_body:
+            params.extend(request_body.decode("utf-8").split("&"))
 
     response_body = f"{method}\nParameters:\n" + "\n".join(params)
 

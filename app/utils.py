@@ -26,11 +26,11 @@ def get_centrifugo_info():
 
 def updateTags():
     popular_tags = Tag.objects.popular_tags()
-    cache.set("popular_tags", list(popular_tags), 60 * 60 * 24)  # Кэшируем на сутки
+    cache.set("popular_tags", list(popular_tags), 60 * 60 * 24)
 
 def updateUsers():
     popular_users = Profile.objects.popular_users()
-    cache.set("popular_users", list(popular_users), 60 * 60 * 24)  # Кэшируем на сутки
+    cache.set("popular_users", list(popular_users), 60 * 60 * 24)
 
 def updateCache():
     updateTags()

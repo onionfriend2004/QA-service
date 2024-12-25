@@ -1,4 +1,18 @@
-FROM python
+FROM python:3.12.7-slim
+
+ENV PYTHONUNBUFFERED=1
+
+RUN apt update
+RUN apt-get install cron -y
+
 WORKDIR /usr/src/app
+
 COPY requirements.txt ./
+
+RUN mkdir /cron
+RUN touch /cron/django_cron.log
+RUN echo "0 0 * * * /usr/local/bin/python /usr/src/app/manage.py update_cache >> /cron/django_cron.log 2>&1" > /etc/cron.d/django_cron
+RUN chmod 0644 /etc/cron.d/django_cron
+RUN crontab /etc/cron.d/django_cron
+
 RUN pip install -r requirements.txt

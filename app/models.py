@@ -60,9 +60,11 @@ class Question(models.Model):
 
     def __str__(self):
         return self.title
+    
     def save(self, *args, **kwargs):
         self.search = SearchVector('title', 'content')
         super().save(*args, **kwargs)
+
     class Meta:
         indexes = [GinIndex(fields=['search'])]
 
