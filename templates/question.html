@@ -45,6 +45,7 @@ question
 {% block jscode %}
     <script src="{% static './js/like.js' %}"></script>
     <script src="{% static './js/is_correct.js' %}"></script>
+    <script src="https://unpkg.com/centrifuge@5.0.1/dist/centrifuge.js"></script>
     <script>
         const centrifuge = new Centrifuge("{{ ws_url }}", {
             token: "{{ token }}"

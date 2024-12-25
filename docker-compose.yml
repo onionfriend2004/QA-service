@@ -1,6 +1,6 @@
 services:
   django:
-    build: 
+    build:
       context: .
       dockerfile: Dockerfile.django
     container_name: django
@@ -9,6 +9,7 @@ services:
       - .:/usr/src/app
     depends_on:
       - pgdb
+      - memcached
 
   pgdb:
     image: postgres
@@ -33,7 +34,7 @@ services:
       - django
 
   centrifugo:
-    image: centrifugo/centrifugo:v3
+    image: centrifugo/centrifugo:v5
     container_name: centrifugo
     ports:
       - "8010:8000"
@@ -46,8 +47,6 @@ services:
   memcached:
     image: memcached:alpine
     container_name: memcached
-    ports:
-      - "11211:11211"
 
 volumes:
   pgdbdata: null

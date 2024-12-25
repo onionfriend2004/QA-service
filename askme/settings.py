@@ -80,12 +80,19 @@ WSGI_APPLICATION = 'askme.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql',   # Используется PostgreSQL
-        'NAME': 'postgres', # Имя базы данных
-        'USER': 'postgres', # Имя пользователя
-        'PASSWORD': 'postgres', # Пароль пользователя
-        'HOST': 'pgdb', # Наименование контейнера для базы данных в Docker Compose
-        'PORT': '5432',  # Порт базы данных
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'postgres',
+        'USER': 'postgres',
+        'PASSWORD': 'postgres',
+        'HOST': 'pgdb',
+        'PORT': '5432',
+    }
+}
+
+CACHES = {
+    'default': {
+        'BACKEND': 'django.core.cache.backends.memcached.PyMemcacheCache',
+        'LOCATION': 'memcached:11211',
     }
 }
 
@@ -140,5 +147,5 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 LOGIN_URL = '/login/'
 
-CENTRIFUGO_SECRET_KEY = 'bbe7d157-a253-4094-9759-06a8236543f9'
+CENTRIFUGO_SECRET_KEY = 'my_secret'
 CENTRIFUGO_WS_URL = 'ws://localhost:8010/connection/websocket'

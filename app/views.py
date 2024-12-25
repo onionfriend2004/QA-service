@@ -46,23 +46,16 @@ def get_page_for_new_answer(answers, new_answer, per_page=5):
     return page_number
 
 def index(request):
-    popular_users = Profile.objects.popular_users()
-    popular_tags = Tag.objects.popular_tags()
     questions_page = paginate(Question.objects.all(), request)
 
     context = {
         'content': questions_page,
-        'popular_tags': popular_tags,
-        'popular_users': popular_users,
     }
 
     return render(request, 'index.html', context)
 
 @login_required
 def ask(request):
-    popular_users = Profile.objects.popular_users()
-    popular_tags = Tag.objects.popular_tags()
-
     if request.method == 'GET':
         form = QuestionForm()
     else:
@@ -73,16 +66,12 @@ def ask(request):
 
     context = {
         'form': form,
-        'popular_tags': popular_tags,
-        'popular_users': popular_users
     }
 
     return render(request, 'ask.html', context)
 
 def question(request, question_id):
     answers = Answer.objects.by_question(question_id)
-    popular_users = Profile.objects.popular_users()
-    popular_tags = Tag.objects.popular_tags()
     question_item = Question.objects.get(id=question_id)
     content = paginate(answers, request, per_page=5)
 
@@ -102,8 +91,6 @@ def question(request, question_id):
         'form': form,
         'content': content,
         'question': question_item,
-        'popular_tags': popular_tags,
-        'popular_users': popular_users,
         **get_centrifugo_info()
     }
 
@@ -111,38 +98,27 @@ def question(request, question_id):
 
 def tag(request, id_tag):
     tag = Tag.objects.get(id=id_tag)
-    popular_users = Profile.objects.popular_users()
-    popular_tags = Tag.objects.popular_tags()
     questions = Question.objects.by_tag(tag)
     content = paginate(questions, request)
 
     context = {
         'content': content,
         'tag': tag,
-        'popular_tags': popular_tags,
-        'popular_users': popular_users,
     }
 
     return render(request, 'tag.html', context)
 
 def hot(request):
-    popular_users = Profile.objects.popular_users()
-    popular_tags = Tag.objects.popular_tags()
     questions = Question.objects.hot()
     content = paginate(questions, request)
 
     context = {
         'content': content,
-        'popular_tags': popular_tags,
-        'popular_users': popular_users,
     }
 
     return render(request, 'hot.html', context)
 
 def login(request):
-    popular_users = Profile.objects.popular_users()
-    popular_tags = Tag.objects.popular_tags()
-
     if request.method == 'GET':
         form = LoginForm()
     else:
@@ -157,8 +133,6 @@ def login(request):
 
     context = {
         'form': form,
-        'popular_tags': popular_tags,
-        'popular_users': popular_users
     }
     return render(request, 'login.html', context)
 
@@ -170,9 +144,6 @@ def logout(request):
     return redirect(reverse('app:index'))
 
 def signup(request):
-    popular_users = Profile.objects.popular_users()
-    popular_tags = Tag.objects.popular_tags()
-
     if request.method == 'GET':
         form = SignUpForm()
     else:
@@ -184,16 +155,11 @@ def signup(request):
 
     context = {
         'form': form,
-        'popular_tags': popular_tags,
-        'popular_users': popular_users
     }
     return render(request, 'signup.html', context)
 
 @login_required
 def settings(request):
-    popular_users = Profile.objects.popular_users()
-    popular_tags = Tag.objects.popular_tags()
-
     form_updated = False
 
     if request.method == 'GET':
@@ -215,8 +181,6 @@ def settings(request):
         'form': form,
         'avatar': avatar,
         'form_updated': form_updated,
-        'popular_tags': popular_tags,
-        'popular_users': popular_users
     }
     return render(request, 'settings.html', context)
 
