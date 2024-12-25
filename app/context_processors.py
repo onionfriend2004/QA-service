@@ -1,4 +1,3 @@
-from .models import Tag, User
 from django.core.cache import cache
 from .utils import updateCache
 import time
